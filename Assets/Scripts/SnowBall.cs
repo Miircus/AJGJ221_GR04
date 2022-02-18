@@ -28,7 +28,10 @@ public class SnowBall : MonoBehaviour
             m_rigidbody.AddForce(300 * Vector3.up, ForceMode.Impulse);
             Debug.Log("jump");
         }
-    }
+
+        m_rigidbody.AddForce(Physics.gravity * m_rigidbody.mass* m_rigidbody.mass);
+    
+}
 
     private void Move()
     {
