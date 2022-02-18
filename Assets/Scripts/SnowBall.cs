@@ -16,20 +16,44 @@ public class SnowBall : MonoBehaviour
     public float m_minSpeed;
     public float m_JumpIntensity;
 
+    public enum ESnowBallState
+    {
+        OnGround,
+        Jumping
+    }
+
+    ESnowBallState eSnowBallCurrentState;
+
 
     private void Awake()
     {
         m_rigidbody = GetComponent<Rigidbody>();
         Physics.gravity = new Vector3(0, -50, 0);
     }
+
+    private void Update()
+    {
+        
+    }
+
     private void FixedUpdate()
     {
         Move();
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        switch (eSnowBallCurrentState)
         {
-            m_rigidbody.AddForce(m_JumpIntensity * Vector3.up, ForceMode.Impulse);
-            Debug.Log("jump");
+            case ESnowBallState.OnGround:
+                print("OnGround");
+                Jump();
+                break;
+            case ESnowBallState.Jumping:
+                Debug.Log("Jumping");
+                break;
+            default:
+                break;
         }
+
+       
         
         m_rigidbody.AddForce(Physics.gravity * m_rigidbody.mass);
         Debug.Log(Physics.gravity);
@@ -62,4 +86,20 @@ public class SnowBall : MonoBehaviour
         m_rigidbody.AddForce(Vector3.right * m_XInput * m_XSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
         m_rigidbody.AddForce(Vector3.forward * m_currentSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }
+
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            m_rigidbody.AddForce(m_JumpIntensity * Vector3.up, ForceMode.Impulse);
+            eSnowBallCurrentState = ESnowBallState.Jumping;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        eSnowBallCurrentState = ESnowBallState.OnGround;
+    }
+
+
 }
