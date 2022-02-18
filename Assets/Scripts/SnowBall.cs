@@ -14,23 +14,25 @@ public class SnowBall : MonoBehaviour
     public float m_basicSpeed;
     public float m_maxSpeed;
     public float m_minSpeed;
+    public float m_JumpIntensity;
 
 
     private void Awake()
     {
         m_rigidbody = GetComponent<Rigidbody>();
+        Physics.gravity = new Vector3(0, -50, 0);
     }
     private void FixedUpdate()
     {
         Move();
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            m_rigidbody.AddForce(300 * Vector3.up, ForceMode.Impulse);
+            m_rigidbody.AddForce(m_JumpIntensity * Vector3.up, ForceMode.Impulse);
             Debug.Log("jump");
         }
-
-        m_rigidbody.AddForce(Physics.gravity * m_rigidbody.mass* m_rigidbody.mass);
-    
+        
+        m_rigidbody.AddForce(Physics.gravity * m_rigidbody.mass);
+        Debug.Log(Physics.gravity);
 }
 
     private void Move()
